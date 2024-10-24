@@ -40,7 +40,7 @@ accordingly.
 
 Running the game:
 
-Make sure that you have Processing installed. Open Processing and upload the code in car-racing-sim.pde, then hit play. A screen should come up on 
+Make sure that you have Processing installed. Open Processing and upload the code in race_car_sim.pde, then hit play. A screen should come up on 
 the starting screen prompting you to hit the button and start the game. From there, you can use the button to restart anytime in the game, including 
 when prompted when you veer too far off of the right lane of the track, as well as when you finish the game.You can use the potentiometer to
 adjust the base speed of the car, and the joystick for turning, as well as extra acceleration in the direction the car is moving.
