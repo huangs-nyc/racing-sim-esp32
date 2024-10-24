@@ -1,49 +1,30 @@
-void createTrack() {
-  float trackWidth = 120;
-  float waveHeight = 250;
-  float segmentWidth = width / 4;
+void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
+  if (buttonState == 0) {
+    restartRace();
+    return;
+  }
 
-  // Create the outer edge of the track (bezier curve)
-  outerTrack = createShape();
-  outerTrack.beginShape();
-  outerTrack.noFill();
-  outerTrack.stroke(255);
-  outerTrack.strokeWeight(20);
+  float turnAngle = map(joystickY, 0, 4095, -40, 40); // Sharper turns
+  carAngle += turnAngle * 0.05;
 
-  outerTrack.vertex(0, height * 3 / 4);
-  outerTrack.bezierVertex(segmentWidth / 3, height * 3 / 4 - waveHeight, 
-                          segmentWidth * 2 / 3, height * 3 / 4 - waveHeight, 
-                          segmentWidth, height * 3 / 4);
-  outerTrack.bezierVertex(segmentWidth * 4 / 3, height * 3 / 4 + waveHeight, 
-                          segmentWidth * 5 / 3, height * 3 / 4 + waveHeight, 
-                          segmentWidth * 2, height * 3 / 4);
-  outerTrack.bezierVertex(segmentWidth * 7 / 3, height * 3 / 4 - waveHeight, 
-                          segmentWidth * 8 / 3, height * 3 / 4 - waveHeight, 
-                          segmentWidth * 3, height * 3 / 4);
-  outerTrack.bezierVertex(segmentWidth * 10 / 3, height * 3 / 4 + waveHeight, 
-                          segmentWidth * 11 / 3, height * 3 / 4 + waveHeight, 
-                          segmentWidth * 4, height * 3 / 4);
-  outerTrack.endShape();
+  float throttle = map(potValue, 0, 4095, 0, 5);
+  float moveDirection = map(joystickX, 0, 4095, 1, -1);
 
-  // Create the inner edge of the track
-  innerTrack = createShape();
-  innerTrack.beginShape();
-  innerTrack.noFill();
-  innerTrack.stroke(255);
-  innerTrack.strokeWeight(20);
+  speed = throttle * moveDirection * 8;
 
-  innerTrack.vertex(0, height / 4);
-  innerTrack.bezierVertex(segmentWidth / 3, height / 4 - waveHeight / 2, 
-                          segmentWidth * 2 / 3, height / 4 - waveHeight / 2, 
-                          segmentWidth, height / 4);
-  innerTrack.bezierVertex(segmentWidth * 4 / 3, height / 4 + waveHeight / 2, 
-                          segmentWidth * 5 / 3, height / 4 + waveHeight / 2, 
-                          segmentWidth * 2, height / 4);
-  innerTrack.bezierVertex(segmentWidth * 7 / 3, height / 4 - waveHeight / 2, 
-                          segmentWidth * 8 / 3, height / 4 - waveHeight / 2, 
-                          segmentWidth * 3, height / 4);
-  innerTrack.bezierVertex(segmentWidth * 10 / 3, height / 4 + waveHeight / 2, 
-                          segmentWidth * 11 / 3, height / 4 + waveHeight / 2, 
-                          segmentWidth * 4, height / 4);
-  innerTrack.endShape();
+  carX += cos(radians(carAngle)) * speed;
+  carY += sin(radians(carAngle)) * speed;
+
+  // Check whether car is within the track boundaries
+  if (!isWithinTrack(carX, carY)) {
+    // If car is out of bounds, move it back inside
+    carX -= cos(radians(carAngle)) * speed;
+    carY -= sin(radians(carAngle)) * speed;
+  }
+}
+
+boolean isWithinTrack(float x, float y) {
+  float outerY = bezierPoint(height * 3 / 4, height * 3 / 4 - 250, height * 3 / 4 + 250, height * 3 / 4, x / (width / 4));
+  float innerY = bezierPoint(height / 4, height / 4 - 125, height / 4 + 125, height / 4, x / (width / 4));
+  return y > innerY && y < outerY;
 }
