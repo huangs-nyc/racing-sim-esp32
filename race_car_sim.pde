@@ -17,6 +17,8 @@ int startTime;
 int finishTime;
 PFont font;
 
+PImage carImage;
+
 int canvasSize = 100;
 int analogMax = 4095;
 
@@ -25,6 +27,7 @@ boolean gameStarted = false;
 void setup()
 {
   size(1440, 780);
+  carImage = loadImage("car.png");
   
   font = createFont("Arial", 20, true);
   textFont(font);
@@ -159,8 +162,8 @@ void renderCar() {
   pushMatrix();
   translate(carX, carY);
   rotate(radians(carAngle));
-  fill(255, 0, 0);
-  rect(-15, -10, 30, 20);
+  imageMode(CENTER);
+  image(carImage, 0, 0, 40, 20);
   popMatrix();
 }
 
