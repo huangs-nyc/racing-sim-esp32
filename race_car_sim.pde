@@ -1,3 +1,28 @@
+/*
+  Serial Joystick
+ Takes in X,Y,Z serial input from a joystick
+ */
+
+import processing.serial.*;
+
+Serial myPort;  // Create object from Serial class
+
+float carX = 100, carY = 100;
+float carAngle = 0;
+float speed = 0;
+String val;      // Data received from the serial port
+
+boolean raceFinished = false;
+int startTime;
+int finishTime;
+PFont font;
+
+PImage carImage;
+
+int canvasSize = 100;
+int analogMax = 4095;
+
+boolean gameStarted = false;
 PShape track;  // Define a shape for the track
 
 void setup() {
@@ -6,8 +31,10 @@ void setup() {
   font = createFont("Arial", 20, true);
   textFont(font);
   
+  printArray(Serial.list());
   String portName = Serial.list()[1];
-  myPort = new Serial(this, portName, 9600); // Ensure baudrate matches your Arduino
+  println(portName);
+  myPort = new Serial(this, portName, 9600); // ensure baudrate is consistent with arduino sketch
   restartRace();
   
   track = createTrack(); // Create a PShape object for the track
@@ -92,4 +119,81 @@ void renderTrack() {
   shape(track);
 }
 
-void renderCar()
+void renderCar() {
+  pushMatrix();
+  translate(carX, carY);
+  rotate(radians(carAngle));
+  imageMode(CENTER);
+  image(carImage, 0, 0, 40, 20);
+  popMatrix();
+}
+
+// Adjust car to stay within the Bézier track
+void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
+  if (buttonState == 0) {
+    restartRace();
+    return;
+  }
+
+  float turnAngle = map(joystickY, 0, 4095, -40, 40); // Sharper turns
+  carAngle += turnAngle * 0.05;
+
+  float throttle = map(potValue, 0, 4095, 0, 5);
+  float moveDirection = map(joystickX, 0, 4095, 1, -1);
+
+  speed = throttle * moveDirection * 8;
+
+  carX += cos(radians(carAngle)) * speed;
+  carY += sin(radians(carAngle)) * speed;
+
+  // Restrict car's position within the track's outer and inner bounds
+  float trackLeft = 0;
+  float trackRight = width;
+  float trackTop = (height / 2) - 350;
+  float trackBottom = (height / 2) + 350;
+
+  if (carX < trackLeft) carX = trackLeft;
+  if (carX > trackRight) carX = trackRight;
+  if (carY < trackTop) carY = trackTop;
+  if (carY > trackBottom) carY = trackBottom;
+}
+
+void displayStartScreen() {
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  text("Press the button to start the race!", width / 2, height / 2);
+}
+
+void restartRace() {
+  carX = 100;
+  carY = 100;
+  carAngle = 0;
+  speed = 0;
+  raceFinished = false;
+  startTime = millis();
+}
+
+void checkRaceCompletion() {
+  if (carX > 1440 && !raceFinished) {
+    raceFinished = true;
+    finishTime = millis();
+  }
+}
+
+void displayRaceFinished() {
+  fill(0, 150);
+  rect(0, 0, width, height);
+  
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  text("You finished the time trial!", width / 2, height / 2 - 50);
+  
+  textSize(30);
+  float raceTime = (finishTime - startTime) / 1000.0;
+  text("Your time: " + nf(raceTime, 0, 2) + " seconds", width / 2, height / 2 + 20);
+  
+  textSize(20);
+  text("Press the button to restart the time trial.", width / 2, height / 2 + 80);
+}
