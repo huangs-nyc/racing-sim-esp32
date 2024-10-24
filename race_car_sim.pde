@@ -1,8 +1,3 @@
-/*
-  Serial Joystick
-  Takes in X,Y,Z serial input from a joystick
- */
-
 import processing.serial.*;
 
 Serial myPort;  // Create object from Serial class
