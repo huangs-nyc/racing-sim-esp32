@@ -263,15 +263,41 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
 }
 
 boolean checkOffTrack() {
-  // Get the color of the pixel under the car's position
-  color currentColor = get(int(carX), int(carY));
+  // Get the car's corners for better off-track detection
+  int carWidth = 40;  // Width of the car image
+  int carHeight = 20; // Height of the car image
   
-  // Check if the color matches the green background color
+  // Define the positions of four corners
+  float[] carCornersX = {
+    carX + cos(radians(carAngle)) * (carWidth / 2),
+    carX - cos(radians(carAngle)) * (carWidth / 2),
+    carX + cos(radians(carAngle + 90)) * (carHeight / 2),
+    carX - cos(radians(carAngle + 90)) * (carHeight / 2)
+  };
+  
+  float[] carCornersY = {
+    carY + sin(radians(carAngle)) * (carWidth / 2),
+    carY - sin(radians(carAngle)) * (carWidth / 2),
+    carY + sin(radians(carAngle + 90)) * (carHeight / 2),
+    carY - sin(radians(carAngle + 90)) * (carHeight / 2)
+  };
+  
+  // Check the color under each corner of the car
   color greenColor = color(50, 200, 50);
   
-  // If the color is green (meaning the car is off the track)
-  if (currentColor == greenColor) {
-    return true;
+  for (int i = 0; i < 4; i++) {
+    int x = int(carCornersX[i]);
+    int y = int(carCornersY[i]);
+    
+    // Ensure the position is within the canvas bounds
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+      color currentColor = get(x, y);
+      // If any corner is off the track (on the green background), return true
+      if (currentColor == greenColor) {
+        return true;
+      }
+    }
   }
-  return false;
+  
+  return false;  // All corners are within the track
 }
