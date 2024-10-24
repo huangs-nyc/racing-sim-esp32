@@ -46,7 +46,7 @@ void draw()
   
   if (!gameStarted) {
     displayStartScreen();
-      if ( myPort.available() > 0) {  // If data is available,
+    if (myPort.available() > 0) {  // If data is available,
       val = myPort.readStringUntil('\n');         // read it and store it in val
       if (val != null) {
         val = trim(val);
@@ -63,8 +63,6 @@ void draw()
     return;
   }
   
-
-  displayStartScreen();
   // display the time
   if (!raceFinished) {
     int currentTime = millis() - startTime;
@@ -73,7 +71,7 @@ void draw()
     text("Current race time: " + nf(currentTime / 1000.0, 0, 2) + " seconds", width - 20, 20);
   }
   
-  if ( myPort.available() > 0) {  // If data is available,
+  if (myPort.available() > 0) {  // If data is available,
     val = myPort.readStringUntil('\n');         // read it and store it in val
     if (val != null) {
       val = trim(val);
@@ -88,11 +86,12 @@ void draw()
       }
     }
   }
+  
   renderTrack();
   renderCar();
   checkRaceCompletion();
   
-  if(raceFinished) {
+  if (raceFinished) {
     displayRaceFinished();
   }
 }
@@ -144,18 +143,13 @@ void renderTrack() {
   stroke(100, 100, 100);
   strokeWeight(90);
   
-  // define track boundaries
-  float waveHeight = height * 0.80;
-  float trackLength = width;
-  float waveFrequency = TWO_PI / 0.2;
-  
-  // draw the track
+  // draw the track using Bezier curves
   beginShape();
-  for (float x = 0; x < trackLength; x += 10) {
-    float y = height - (sin(x * waveFrequency / width) * waveHeight / 2 + waveHeight / 2);
-    vertex(x, y);
-  }
-  endShape();
+  vertex(0, height - 100);
+  bezierVertex(width / 4, height - 150, width / 4 * 3, height - 50, width, height - 100);
+  vertex(width, height);
+  vertex(0, height);
+  endShape(CLOSE);
 }
 
 void renderCar() {
@@ -179,27 +173,26 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
   
   float turnAngle = map(joystickY, 0, 4095, -45, 45);
   println(turnAngle);
-    if (abs(turnAngle) < 4.8) {
+  if (abs(turnAngle) < 4.8) {
     carAngle = carAngle * 1;
   } else {
     carAngle += turnAngle * 0.05;
   }
-  
   
   float throttle = map(potValue, 0, 4095, 0, 5);
   float moveDirection = map(joystickX, 0, 4095, 1, -1);
   
   speed = throttle * moveDirection * 5;
   
-  carX += cos(radians(carAngle)) * speed;
-  carY += sin(radians(carAngle)) * speed;
+  float newCarX = carX + cos(radians(carAngle)) * speed;
+  float newCarY = carY + sin(radians(carAngle)) * speed;
   
   // check if on track
-  float waveFrequency = TWO_PI / 0.2;
-  float waveHeight = height * 0.80;
-  float trackY = height - (sin(carX * waveFrequency / width) * waveHeight/2 + waveHeight/2);
-  if (carY < trackY - 25 || carY > trackY + 25) {
-    carY = trackY;
+  if (isOnTrack(newCarX, newCarY)) {
+    carX = newCarX;
+    carY = newCarY;
+  } else {
+    speed = 0;  // Stop the car if it touches the edge
   }
   
   // check if within bounds
@@ -207,4 +200,10 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
   if (carX > width) {carX = width;}
   if (carY < 0) {carY = 0;}
   if (carY > height) {carY = height;}
+}
+
+boolean isOnTrack(float x, float y) {
+  float trackYStart = height - 100; // Adjust based on your track height
+  float trackYEnd = height; // Adjust based on your track height
+  return y >= trackYStart && y <= trackYEnd; // Return true if the car is on the track
 }
