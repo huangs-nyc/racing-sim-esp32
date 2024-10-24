@@ -1,0 +1,59 @@
+void drawTrack() {
+  // Track parameters
+  float trackWidth = 80;
+  
+  // Draw outer and inner track borders
+  noFill();
+  strokeWeight(trackWidth);
+  strokeCap(ROUND);
+  strokeJoin(ROUND);
+  
+  // Asphalt color
+  stroke(69, 69, 69);
+  
+  // Main track path using bezier curves
+  beginShape();
+  vertex(200, 200);
+  bezierVertex(400, 150, 600, 150, 800, 300);
+  bezierVertex(1000, 450, 1200, 400, 1200, 200);
+  bezierVertex(1200, 100, 1000, 100, 900, 200);
+  bezierVertex(800, 300, 700, 400, 500, 400);
+  bezierVertex(300, 400, 200, 300, 200, 200);
+  endShape();
+  
+  // Track markings
+  strokeWeight(4);
+  stroke(255, 255, 255); // White lines
+  
+  // Draw start/finish line
+  pushMatrix();
+  translate(200, 200);
+  rotate(radians(45));
+  for(int i = -40; i < 40; i += 10) {
+    line(i, -15, i, 15);
+  }
+  popMatrix();
+  
+  // Draw track edges
+  strokeWeight(6);
+  stroke(255, 0, 0); // Red border on one side
+  noFill();
+  beginShape();
+  vertex(200, 160);
+  bezierVertex(420, 110, 620, 110, 820, 260);
+  bezierVertex(1040, 410, 1240, 360, 1240, 160);
+  bezierVertex(1240, 60, 1020, 60, 920, 160);
+  bezierVertex(820, 260, 720, 360, 520, 360);
+  bezierVertex(320, 360, 200, 260, 200, 160);
+  endShape();
+  
+  stroke(255, 255, 255); // White border on other side
+  beginShape();
+  vertex(200, 240);
+  bezierVertex(380, 190, 580, 190, 780, 340);
+  bezierVertex(960, 490, 1160, 440, 1160, 240);
+  bezierVertex(1160, 140, 980, 140, 880, 240);
+  bezierVertex(780, 340, 680, 440, 480, 440);
+  bezierVertex(280, 440, 200, 340, 200, 240);
+  endShape();
+}
