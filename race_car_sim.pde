@@ -263,41 +263,38 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
 }
 
 boolean checkOffTrack() {
-  // Get the car's corners for better off-track detection
   int carWidth = 40;  // Width of the car image
   int carHeight = 20; // Height of the car image
-  
-  // Define the positions of four corners
-  float[] carCornersX = {
-    carX + cos(radians(carAngle)) * (carWidth / 2),
-    carX - cos(radians(carAngle)) * (carWidth / 2),
-    carX + cos(radians(carAngle + 90)) * (carHeight / 2),
-    carX - cos(radians(carAngle + 90)) * (carHeight / 2)
+
+  // Get the current track color (gray)
+  color trackColor = color(69, 69, 69); // Asphalt color
+
+  // Sample key points around the car (front, back, and sides)
+  float[][] samplePoints = {
+    {carX + cos(radians(carAngle)) * (carWidth / 2), carY + sin(radians(carAngle)) * (carHeight / 2)},  // Front
+    {carX - cos(radians(carAngle)) * (carWidth / 2), carY - sin(radians(carAngle)) * (carHeight / 2)},  // Back
+    {carX + cos(radians(carAngle + 90)) * (carWidth / 2), carY + sin(radians(carAngle + 90)) * (carHeight / 2)},  // Left
+    {carX - cos(radians(carAngle + 90)) * (carWidth / 2), carY - sin(radians(carAngle + 90)) * (carHeight / 2)}   // Right
   };
-  
-  float[] carCornersY = {
-    carY + sin(radians(carAngle)) * (carWidth / 2),
-    carY - sin(radians(carAngle)) * (carWidth / 2),
-    carY + sin(radians(carAngle + 90)) * (carHeight / 2),
-    carY - sin(radians(carAngle + 90)) * (carHeight / 2)
-  };
-  
-  // Check the color under each corner of the car
-  color greenColor = color(50, 200, 50);
-  
-  for (int i = 0; i < 4; i++) {
-    int x = int(carCornersX[i]);
-    int y = int(carCornersY[i]);
-    
-    // Ensure the position is within the canvas bounds
+
+  color greenColor = color(50, 200, 50);  // Grass/Off-track color
+
+  // Check each sample point
+  for (int i = 0; i < samplePoints.length; i++) {
+    int x = int(samplePoints[i][0]);
+    int y = int(samplePoints[i][1]);
+
+    // Ensure the point is within the canvas bounds
     if (x >= 0 && x < width && y >= 0 && y < height) {
       color currentColor = get(x, y);
-      // If any corner is off the track (on the green background), return true
+
+      // Check if the point is on the green background (off the track)
       if (currentColor == greenColor) {
-        return true;
+        return true;  // Car is off track
       }
     }
   }
-  
-  return false;  // All corners are within the track
+
+  return false;  // Car is still on the track
 }
+
