@@ -20,6 +20,8 @@ PFont font;
 int canvasSize = 100;
 int analogMax = 4095;
 
+boolean gameStarted = false;
+
 void setup()
 {
   size(1440, 780);
@@ -38,6 +40,28 @@ void draw()
 {
   println(raceFinished);
   background(0);
+  
+  if (!gameStarted) {
+    displayStartScreen();
+      if ( myPort.available() > 0) {  // If data is available,
+      val = myPort.readStringUntil('\n');         // read it and store it in val
+      if (val != null) {
+        val = trim(val);
+        String[] values = split(val, ',');
+        if (values.length == 4) {
+          int buttonState = int(values[3]);
+          if (buttonState == 0) {
+            gameStarted = true;
+            restartRace();
+          }
+        }
+      }
+    }
+    return;
+  }
+  
+
+  displayStartScreen();
   // display the time
   if (!raceFinished) {
     int currentTime = millis() - startTime;
@@ -68,6 +92,13 @@ void draw()
   if(raceFinished) {
     displayRaceFinished();
   }
+}
+
+void displayStartScreen() {
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  text("Press the button to start the race!", width / 2, height / 2);
 }
 
 void restartRace() {
@@ -108,24 +139,19 @@ void renderTrack() {
   background(50, 200, 50);
   noFill();
   stroke(100, 100, 100);
-  strokeWeight(50);
+  strokeWeight(90);
   
-  // draw track
-  beginShape();
-  vertex(100, 100);
-  bezierVertex(200, 500, 300, 200, 400, 150);
-  bezierVertex(500, 100, 600, 300, 700, 250);
-  bezierVertex(800, 200, 900, 100, 1000, 150);
-  endShape();
+  // define track boundaries
+  float waveHeight = height * 0.80;
+  float trackLength = width;
+  float waveFrequency = TWO_PI / 0.2;
   
-  // lane markers
-  stroke(255);
-  strokeWeight(2);
+  // draw the track
   beginShape();
-  vertex(100, 110);
-  bezierVertex(200, 110, 300, 210, 400, 160);
-  bezierVertex(500, 110, 600, 310, 700, 260);
-  bezierVertex(800, 210, 900, 110, 1000, 160);
+  for (float x = 0; x < trackLength; x += 10) {
+    float y = height - (sin(x * waveFrequency / width) * waveHeight / 2 + waveHeight / 2);
+    vertex(x, y);
+  }
   endShape();
 }
 
@@ -160,14 +186,18 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
   float throttle = map(potValue, 0, 4095, 0, 5);
   float moveDirection = map(joystickX, 0, 4095, 1, -1);
   
-  if (abs(moveDirection) < 0.2) {
-    speed = 0;
-  } else {
-    speed = throttle * moveDirection * 5;
-  }
+  speed = throttle * moveDirection * 5;
   
   carX += cos(radians(carAngle)) * speed;
   carY += sin(radians(carAngle)) * speed;
+  
+  // check if on track
+  float waveFrequency = TWO_PI / 0.2;
+  float waveHeight = height * 0.80;
+  float trackY = height - (sin(carX * waveFrequency / width) * waveHeight/2 + waveHeight/2);
+  if (carY < trackY - 25 || carY > trackY + 25) {
+    carY = trackY;
+  }
   
   // check if within bounds
   if (carX < 0) {carX = 0;}
