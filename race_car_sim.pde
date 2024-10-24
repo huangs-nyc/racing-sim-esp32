@@ -46,7 +46,7 @@ void draw()
   
   if (!gameStarted) {
     displayStartScreen();
-      if ( myPort.available() > 0) {  // If data is available,
+    if ( myPort.available() > 0) {  // If data is available,
       val = myPort.readStringUntil('\n');         // read it and store it in val
       if (val != null) {
         val = trim(val);
@@ -63,9 +63,7 @@ void draw()
     return;
   }
   
-
   displayStartScreen();
-  // display the time
   
   if ( myPort.available() > 0) {  // If data is available,
     val = myPort.readStringUntil('\n');         // read it and store it in val
@@ -82,19 +80,27 @@ void draw()
       }
     }
   }
+  
   renderTrack();
-    if (!raceFinished) {
+  
+  if (!raceFinished) {
     int currentTime = millis() - startTime;
     fill(255);
     textAlign(RIGHT, TOP);
     text("Current race time: " + nf(currentTime / 1000.0, 0, 2) + " seconds", width - 20, 20);
   }
+  
   renderCar();
   checkRaceCompletion();
   
   if(raceFinished) {
     displayRaceFinished();
   }
+  
+  // Display speed at bottom left
+  fill(255);
+  textAlign(LEFT, BOTTOM);
+  text("Speed: " + nf(speed, 0, 2), 20, height - 20);
 }
 
 void displayStartScreen() {
@@ -114,7 +120,7 @@ void restartRace() {
 }
 
 void checkRaceCompletion() {
-  if (carX > 1440 && !raceFinished) {
+  if (carX >= width && !raceFinished) {  // Finish point is at the far right
     raceFinished = true;
     finishTime = millis();
   }
@@ -158,7 +164,6 @@ void renderTrack() {
   vertex(0, height/2);
   
   // Create a series of bezier curves that form a wave pattern
-  // Each wave consists of two bezier curves for smooth transition
   float waveHeight = 350;
   float segmentWidth = width/4;
   
@@ -188,7 +193,7 @@ void renderCar() {
   translate(carX, carY);
   rotate(radians(carAngle));
   imageMode(CENTER);
-  image(carImage, -60, 250, 40, 20);
+  image(carImage, 0, 0, 40, 20);
   popMatrix();
 }
 
@@ -197,19 +202,9 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
     restartRace();
     return;
   }
-  if (buttonState == 0 && raceFinished) {
-    restartRace();
-    return;
-  }
   
-  float turnAngle = map(joystickY, 0, 4095, -20, 20);
-  println(turnAngle);
-    if (abs(turnAngle) < 4.8) {
-    carAngle = carAngle * 1;
-  } else {
-    carAngle += turnAngle * 0.1;
-  }
-  
+  float turnAngle = map(joystickY, 0, 4095, -40, 40);  // Sharper turns
+  carAngle += turnAngle * 0.05;  // Increased rotation for sharper turning
   
   float throttle = map(potValue, 0, 4095, 0, 5);
   float moveDirection = map(joystickX, 0, 4095, 1, -1);
@@ -219,9 +214,15 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
   carX += cos(radians(carAngle)) * speed;
   carY += sin(radians(carAngle)) * speed;
   
-  // check if within bounds
-  if (carX < 0) {carX = 0;}
-  if (carX > width) {carX = width;}
-  if (carY < 0) {carY = 0;}
-  if (carY > height) {carY = height;}
+  // Stay within track borders (simple boundary check)
+  float trackLeft = 0;
+  float trackRight = width;
+  float trackTop = (height / 2) - 350;
+  float trackBottom = (height / 2) + 350;
+  
+  if (carX < trackLeft) carX = trackLeft;
+  if (carX > trackRight) carX = trackRight;
+  if (carY < trackTop) carY = trackTop;
+  if (carY > trackBottom) carY = trackBottom;
 }
+
