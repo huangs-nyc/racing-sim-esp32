@@ -1,6 +1,6 @@
 /*
   Serial Joystick
- Takes in X,Y,Z serial input from a joystick
+  Takes in X,Y,Z serial input from a joystick
  */
 
 import processing.serial.*;
@@ -13,6 +13,7 @@ float speed = 0;
 String val;      // Data received from the serial port
 
 boolean raceFinished = false;
+boolean offTrack = false;  // New flag for off-track detection
 int startTime;
 int finishTime;
 PFont font;
@@ -41,7 +42,6 @@ void setup()
 
 void draw()
 {
-  println(raceFinished);
   background(0);
   
   if (!gameStarted) {
@@ -63,8 +63,26 @@ void draw()
     return;
   }
   
-  displayStartScreen();
-  
+  // Off-track state handling
+  if (offTrack) {
+    displayOffTrackScreen();
+    if ( myPort.available() > 0) {  // Check button press to restart
+      val = myPort.readStringUntil('\n');         
+      if (val != null) {
+        val = trim(val);
+        String[] values = split(val, ',');
+        if (values.length == 4) {
+          int buttonState = int(values[3]);
+          if (buttonState == 0) {
+            restartRace();
+          }
+        }
+      }
+    }
+    return;  // Skip the rest of the game loop while off-track
+  }
+
+  // Main game logic
   if ( myPort.available() > 0) {  // If data is available,
     val = myPort.readStringUntil('\n');         // read it and store it in val
     if (val != null) {
@@ -83,6 +101,11 @@ void draw()
   
   renderTrack();
   
+  // Check if car is off the track (touching the green background)
+  if (!raceFinished && checkOffTrack()) {
+    offTrack = true;
+  }
+  
   if (!raceFinished) {
     int currentTime = millis() - startTime;
     fill(255);
@@ -93,7 +116,7 @@ void draw()
   renderCar();
   checkRaceCompletion();
   
-  if(raceFinished) {
+  if (raceFinished) {
     displayRaceFinished();
   }
   
@@ -110,12 +133,26 @@ void displayStartScreen() {
   text("Press the button to start the race!", width / 2, height / 2);
 }
 
+void displayOffTrackScreen() {
+  fill(0, 150);
+  rect(0, 0, width, height);
+  
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  text("You went off track!", width / 2, height / 2 - 50);
+  
+  textSize(30);
+  text("Press the button to restart.", width / 2, height / 2 + 20);
+}
+
 void restartRace() {
   carX = 100;
   carY = 100;
   carAngle = 0;
   speed = 0;
   raceFinished = false;
+  offTrack = false;  // Reset off-track flag
   startTime = millis();
 }
 
@@ -147,11 +184,10 @@ void renderTrack() {
   // Track parameters
   float trackWidth = 120;
   
-  background(50, 200, 50);
+  background(50, 200, 50);  // Green background
   noFill();
   
   // Draw outer and inner track borders
-  noFill();
   strokeWeight(trackWidth);
   strokeCap(ROUND);
   strokeJoin(ROUND);
@@ -161,29 +197,29 @@ void renderTrack() {
   
   // Main track path using bezier curves to create waves
   beginShape();
-  vertex(0, height/2);
+  vertex(0, height / 2);
   
   // Create a series of bezier curves that form a wave pattern
   float waveHeight = 350;
-  float segmentWidth = width/4;
+  float segmentWidth = width / 4;
   
   // Wave 1
-  bezierVertex(segmentWidth/3, height/2 - waveHeight, 
-               segmentWidth*2/3, height/2 - waveHeight,
-               segmentWidth, height/2);
+  bezierVertex(segmentWidth / 3, height / 2 - waveHeight, 
+               segmentWidth * 2 / 3, height / 2 - waveHeight,
+               segmentWidth, height / 2);
                
-  bezierVertex(segmentWidth*4/3, height/2 + waveHeight,
-               segmentWidth*5/3, height/2 + waveHeight,
-               segmentWidth*2, height/2);
+  bezierVertex(segmentWidth * 4 / 3, height / 2 + waveHeight,
+               segmentWidth * 5 / 3, height / 2 + waveHeight,
+               segmentWidth * 2, height / 2);
                
   // Wave 2
-  bezierVertex(segmentWidth*7/3, height/2 - waveHeight,
-               segmentWidth*8/3, height/2 - waveHeight,
-               segmentWidth*3, height/2);
+  bezierVertex(segmentWidth * 7 / 3, height / 2 - waveHeight,
+               segmentWidth * 8 / 3, height / 2 - waveHeight,
+               segmentWidth * 3, height / 2);
                
-  bezierVertex(segmentWidth*10/3, height/2 + waveHeight,
-               segmentWidth*11/3, height/2 + waveHeight,
-               segmentWidth*4, height/2);
+  bezierVertex(segmentWidth * 10 / 3, height / 2 + waveHeight,
+               segmentWidth * 11 / 3, height / 2 + waveHeight,
+               segmentWidth * 4, height / 2);
   
   endShape();
 }
@@ -224,4 +260,18 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
   if (carX > trackRight) carX = trackRight;
   if (carY < trackTop) carY = trackTop;
   if (carY > trackBottom) carY = trackBottom;
+}
+
+boolean checkOffTrack() {
+  // Get the color of the pixel under the car's position
+  color currentColor = get(int(carX), int(carY));
+  
+  // Check if the color matches the green background color
+  color greenColor = color(50, 200, 50);
+  
+  // If the color is green (meaning the car is off the track)
+  if (currentColor == greenColor) {
+    return true;
+  }
+  return false;
 }
