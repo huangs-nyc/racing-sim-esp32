@@ -148,22 +148,22 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
     return;
   }
   
-  float turnAngle = map(joystickX, 0, 4095, -45, 45);
+  float turnAngle = map(joystickY, 0, 4095, -45, 45);
   println(turnAngle);
     if (abs(turnAngle) < 4.8) {
-    carAngle = 0; // fix this, TODO
+    carAngle = carAngle * 1;
   } else {
     carAngle += turnAngle * 0.05;
   }
   
   
   float throttle = map(potValue, 0, 4095, 0, 5);
-  float moveDirection = map(joystickY, 0, 4095, -1, 1);
+  float moveDirection = map(joystickX, 0, 4095, 1, -1);
   
   if (abs(moveDirection) < 0.2) {
     speed = 0;
   } else {
-    speed = throttle * moveDirection;
+    speed = throttle * moveDirection * 5;
   }
   
   carX += cos(radians(carAngle)) * speed;
