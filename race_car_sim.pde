@@ -101,10 +101,8 @@ void draw()
   
   renderTrack();
   
-  // Check if car is off the track (touching the green background)
-  if (!raceFinished && checkOffTrack()) {
-    offTrack = true;
-  }
+  renderCar();
+  checkRaceCompletion();
   
   if (!raceFinished) {
     int currentTime = millis() - startTime;
@@ -112,9 +110,6 @@ void draw()
     textAlign(RIGHT, TOP);
     text("Current race time: " + nf(currentTime / 1000.0, 0, 2) + " seconds", width - 20, 20);
   }
-  
-  renderCar();
-  checkRaceCompletion();
   
   if (raceFinished) {
     displayRaceFinished();
@@ -130,7 +125,7 @@ void displayStartScreen() {
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(40);
-  text("Press the button to start the race!", width / 2, height / 2);
+  text("Press the button to start the right lane race! Remember to stay on the right lane!", width / 2, height / 2);
 }
 
 void displayOffTrackScreen() {
@@ -140,7 +135,7 @@ void displayOffTrackScreen() {
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(40);
-  text("You went off track!", width / 2, height / 2 - 50);
+  text("You went too far off the right lane!!", width / 2, height / 2 - 50);
   
   textSize(30);
   text("Press the button to restart.", width / 2, height / 2 + 20);
@@ -189,8 +184,6 @@ void renderTrack() {
   
   // Draw outer and inner track borders
   strokeWeight(trackWidth);
-  strokeCap(ROUND);
-  strokeJoin(ROUND);
   
   // Asphalt color
   stroke(69, 69, 69);
@@ -222,6 +215,37 @@ void renderTrack() {
                segmentWidth * 4, height / 2);
   
   endShape();
+  
+  strokeWeight(5);
+  
+  // Asphalt color
+  stroke(255);
+  
+  // Main track path using bezier curves to create waves
+  beginShape();
+  vertex(0, height / 2);
+  
+  // Create a series of bezier curves that form a wave pattern
+  
+  // Wave 1
+  bezierVertex(segmentWidth / 3, height / 2 - waveHeight, 
+               segmentWidth * 2 / 3, height / 2 - waveHeight,
+               segmentWidth, height / 2);
+               
+  bezierVertex(segmentWidth * 4 / 3, height / 2 + waveHeight,
+               segmentWidth * 5 / 3, height / 2 + waveHeight,
+               segmentWidth * 2, height / 2);
+               
+  // Wave 2
+  bezierVertex(segmentWidth * 7 / 3, height / 2 - waveHeight,
+               segmentWidth * 8 / 3, height / 2 - waveHeight,
+               segmentWidth * 3, height / 2);
+               
+  bezierVertex(segmentWidth * 10 / 3, height / 2 + waveHeight,
+               segmentWidth * 11 / 3, height / 2 + waveHeight,
+               segmentWidth * 4, height / 2);
+  
+  endShape();
 }
 
 void renderCar() {
@@ -229,8 +253,16 @@ void renderCar() {
   translate(carX, carY);
   rotate(radians(carAngle));
   imageMode(CENTER);
-  image(carImage, 10, 40, 40, 20);
+  image(carImage, 10, 40, 20, 10);
   popMatrix();
+  
+  boolean end;
+  end = checkOffTrack();
+  println(end);
+  if (end) {
+    offTrack = end;
+    return;
+  }
 }
 
 void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
@@ -260,41 +292,21 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
   if (carX > trackRight) carX = trackRight;
   if (carY < trackTop) carY = trackTop;
   if (carY > trackBottom) carY = trackBottom;
+  
 }
 
 boolean checkOffTrack() {
-  int carWidth = 40;  // Width of the car image
-  int carHeight = 20; // Height of the car image
-
-  // Get the current track color (gray)
-  color trackColor = color(69, 69, 69); // Asphalt color
-
-  // Sample key points around the car (front, back, and sides)
-  float[][] samplePoints = {
-    {carX + cos(radians(carAngle)) * (carWidth / 2), carY + sin(radians(carAngle)) * (carHeight / 2)},  // Front
-    {carX - cos(radians(carAngle)) * (carWidth / 2), carY - sin(radians(carAngle)) * (carHeight / 2)},  // Back
-    {carX + cos(radians(carAngle + 90)) * (carWidth / 2), carY + sin(radians(carAngle + 90)) * (carHeight / 2)},  // Left
-    {carX - cos(radians(carAngle + 90)) * (carWidth / 2), carY - sin(radians(carAngle + 90)) * (carHeight / 2)}   // Right
-  };
-
-  color greenColor = color(50, 200, 50);  // Grass/Off-track color
-
-  // Check each sample point
-  for (int i = 0; i < samplePoints.length; i++) {
-    int x = int(samplePoints[i][0]);
-    int y = int(samplePoints[i][1]);
-
-    // Ensure the point is within the canvas bounds
-    if (x >= 0 && x < width && y >= 0 && y < height) {
-      color currentColor = get(x, y);
-
-      // Check if the point is on the green background (off the track)
-      if (currentColor == greenColor) {
-        return true;  // Car is off track
-      }
-    }
+  // Get the color of the pixel under the car's position
+  color currentColor = get(int(carX), int(carY));
+  print(currentColor);
+  
+  // Check if the color matches the green background color
+  color greenColor = color(50, 200, 50);
+  
+  // If the color is green (meaning the car is off the track)
+  if (currentColor == greenColor) {
+    delay(200);
+    return true;
   }
-
-  return false;  // Car is still on the track
+  return false;
 }
-
