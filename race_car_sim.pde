@@ -24,7 +24,8 @@ int analogMax = 4095;
 
 boolean gameStarted = false;
 
-void setup() {
+void setup()
+{
   size(1440, 780);
   carImage = loadImage("car.png");
   
@@ -38,13 +39,14 @@ void setup() {
   restartRace();
 }
 
-void draw() {
+void draw()
+{
   println(raceFinished);
   background(0);
   
   if (!gameStarted) {
     displayStartScreen();
-    if (myPort.available() > 0) {  // If data is available,
+      if ( myPort.available() > 0) {  // If data is available,
       val = myPort.readStringUntil('\n');         // read it and store it in val
       if (val != null) {
         val = trim(val);
@@ -61,16 +63,11 @@ void draw() {
     return;
   }
   
+
   displayStartScreen();
   // display the time
-  if (!raceFinished) {
-    int currentTime = millis() - startTime;
-    fill(255);
-    textAlign(RIGHT, TOP);
-    text("Current race time: " + nf(currentTime / 1000.0, 0, 2) + " seconds", width - 20, 20);
-  }
   
-  if (myPort.available() > 0) {  // If data is available,
+  if ( myPort.available() > 0) {  // If data is available,
     val = myPort.readStringUntil('\n');         // read it and store it in val
     if (val != null) {
       val = trim(val);
@@ -85,12 +82,17 @@ void draw() {
       }
     }
   }
-  
   renderTrack();
+    if (!raceFinished) {
+    int currentTime = millis() - startTime;
+    fill(255);
+    textAlign(RIGHT, TOP);
+    text("Current race time: " + nf(currentTime / 1000.0, 0, 2) + " seconds", width - 20, 20);
+  }
   renderCar();
   checkRaceCompletion();
   
-  if (raceFinished) {
+  if(raceFinished) {
     displayRaceFinished();
   }
 }
@@ -112,7 +114,7 @@ void restartRace() {
 }
 
 void checkRaceCompletion() {
-  if (carX >= 1000 && carY >= 150 && !raceFinished) {
+  if (carX > 1440 && !raceFinished) {
     raceFinished = true;
     finishTime = millis();
   }
@@ -136,19 +138,48 @@ void displayRaceFinished() {
 }
 
 void renderTrack() {
-  // Make grass
+  // Track parameters
+  float trackWidth = 120;
+  
   background(50, 200, 50);
   noFill();
-  stroke(100, 100, 100);
-  strokeWeight(90);
   
-  // Draw the track using multiple bezier curves
+  // Draw outer and inner track borders
+  noFill();
+  strokeWeight(trackWidth);
+  strokeCap(ROUND);
+  strokeJoin(ROUND);
+  
+  // Asphalt color
+  stroke(69, 69, 69);
+  
+  // Main track path using bezier curves to create waves
   beginShape();
-  vertex(50, 600);
-  bezierVertex(200, 580, 300, 420, 400, 500);
-  bezierVertex(500, 600, 600, 400, 700, 460);
-  bezierVertex(800, 520, 900, 300, 1000, 380);
-  bezierVertex(1100, 460, 1200, 500, 1300, 400);
+  vertex(0, height/2);
+  
+  // Create a series of bezier curves that form a wave pattern
+  // Each wave consists of two bezier curves for smooth transition
+  float waveHeight = 350;
+  float segmentWidth = width/4;
+  
+  // Wave 1
+  bezierVertex(segmentWidth/3, height/2 - waveHeight, 
+               segmentWidth*2/3, height/2 - waveHeight,
+               segmentWidth, height/2);
+               
+  bezierVertex(segmentWidth*4/3, height/2 + waveHeight,
+               segmentWidth*5/3, height/2 + waveHeight,
+               segmentWidth*2, height/2);
+               
+  // Wave 2
+  bezierVertex(segmentWidth*7/3, height/2 - waveHeight,
+               segmentWidth*8/3, height/2 - waveHeight,
+               segmentWidth*3, height/2);
+               
+  bezierVertex(segmentWidth*10/3, height/2 + waveHeight,
+               segmentWidth*11/3, height/2 + waveHeight,
+               segmentWidth*4, height/2);
+  
   endShape();
 }
 
@@ -157,7 +188,7 @@ void renderCar() {
   translate(carX, carY);
   rotate(radians(carAngle));
   imageMode(CENTER);
-  image(carImage, 0, 0, 40, 20);
+  image(carImage, -60, 250, 40, 20);
   popMatrix();
 }
 
@@ -171,43 +202,26 @@ void updateCar(int joystickX, int joystickY, int potValue, int buttonState) {
     return;
   }
   
-  float turnAngle = map(joystickY, 0, 4095, -45, 45);
-  if (abs(turnAngle) < 4.8) {
+  float turnAngle = map(joystickY, 0, 4095, -20, 20);
+  println(turnAngle);
+    if (abs(turnAngle) < 4.8) {
     carAngle = carAngle * 1;
   } else {
-    carAngle += turnAngle * 0.05;
+    carAngle += turnAngle * 0.1;
   }
+  
   
   float throttle = map(potValue, 0, 4095, 0, 5);
   float moveDirection = map(joystickX, 0, 4095, 1, -1);
   
-  speed = throttle * moveDirection * 5;
+  speed = throttle * moveDirection * 8;
   
   carX += cos(radians(carAngle)) * speed;
   carY += sin(radians(carAngle)) * speed;
-
-  // Check if the car is within the bezier track
-  if (!isWithinTrack(carX, carY)) {
-    speed = 0;  // Stop the car if it's outside the track
-  }
-
-  // Check if within bounds
-  if (carX < 0) { carX = 0; }
-  if (carX > width) { carX = width; }
-  if (carY < 0) { carY = 0; }
-  if (carY > height) { carY = height; }
-}
-
-// Check if the car is within the bounds of the track
-boolean isWithinTrack(float x, float y) {
-  // You can implement more sophisticated collision detection here
-  // For simplicity, we will use the distance to the track edge
-  float minDistanceToTrack = 50; // Example distance to define "within track"
   
-  // Add logic to calculate the actual distance from the car to the track edges
-  // For simplicity, this is a rough check; you might want to sample points along the track
-  float distanceToTrack = dist(x, y, 700, 500); // Replace with actual track edge positions
-  
-  return distanceToTrack < minDistanceToTrack; // Adjust condition as needed
+  // check if within bounds
+  if (carX < 0) {carX = 0;}
+  if (carX > width) {carX = width;}
+  if (carY < 0) {carY = 0;}
+  if (carY > height) {carY = height;}
 }
-
