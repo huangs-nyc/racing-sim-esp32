@@ -8,6 +8,7 @@ This game spawns a car on a track, and you must try to keep on the right lane of
 get to the end as fast as possible. There is a speed tracker and a race time tracker on screen as well.
 
 Demo URL: https://youtu.be/L3pJh7pFlN4
+
 Blog Post URL: https://steven-ces-blog.notion.site/Race-Car-Simulator-11b4dc2df41c808ba29cd394c15fe13f?pvs=4
 
 # Breadboard Setup
@@ -24,6 +25,8 @@ Materials needed:
 </ul>
 
 The code in this repo works with a specific breadboard setup. Here is the breadboard setup that you should follow: [insert image here]
+
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/breadboard-setup.jpg" height="400" width="300"></a>
 
 # Software Setup
 
