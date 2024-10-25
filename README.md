@@ -33,7 +33,7 @@ The code in this repo works with a specific breadboard setup. Here is the breadb
 Sensory input and testing:
 
 Make sure that you have the Arduino IDE software and your ESP32 software installed. If you do not
-have Arduino IDE or tehe ESP32 LILYGO TTGO software, follow these instructions to install them: https://coms3930.notion.site/Lab-1-TFT-Display-a53b9c10137a4d95b22d301ec6009a94.
+have Arduino IDE or the ESP32 LILYGO TTGO software, follow these instructions to install them: https://coms3930.notion.site/Lab-1-TFT-Display-a53b9c10137a4d95b22d301ec6009a94.
 
 Once you have this installed, connect your board to the Arduino IDE, and upload and run the code from the data-input-testing.ino file. Open your
 serial monitor, and if your breadboard connections are correct, you will see four values, separated by commas. The first is the x-acis input, which
@@ -50,4 +50,15 @@ adjust the base speed of the car, and the joystick for turning, as well as extra
 
 Something to note about this setup is that I switched the axes in terms of input in order to make it work with my enclosure. The default would be using the
 y-axis to move forward and backward and x-axis to turn. However, since my enclosure forced my wires sideways, I switched them. To adjust which access you want to use,
-go to the updateCar() function and change the first paramter for carAngle and moveDirection to fit your needs.
+go to the updateCar() function and change the first parameter for carAngle and moveDirection to fit your needs.
+
+From there, it should work! Check out the Demo URL above to check for functionality.
+
+# Enclosure Design
+
+Now that your software and breadboard is up and running, we can turn towards the enclosure deisgn to house the three main components. For my enclosure design,
+I decided to go with a layered 3D-print system, which you can find at this link: https://cad.onshape.com/documents/063c7e8d5bc175fe4d6adb77/w/1ce7811f8bf842ba5b9ee530/e/09f7d4457a9dedc46022296b.
+You can also find the individual parts that make up this assembly in the 3D-prints folder.
+
+If you choose to go with my design, there are a few things to keep in mind. First, you can use the M3x100 screws in the six holes to assemble them together. You might also have to use
+things like dowels and hot glue to help prop up some controls on the inside because the components are of different sizes.
