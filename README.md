@@ -63,4 +63,6 @@ I decided to go with a layered 3D-print system, which you can find at this link:
 You can also find the individual parts that make up this assembly in the 3D-prints folder.
 
 If you choose to go with my design, there are a few things to keep in mind. First, you can use the M3x100 screws in the six holes to assemble them together. You might also have to use
-things like dowels and hot glue to help prop up some controls on the inside because the components are of different sizes.
+things like dowels and hot glue to help prop up some controls on the inside because the components are of different sizes. Depending on how you print the pieces,
+you might have to pry off tree supports in cases where the hollow parts are facing downwards. This was the case in my design process, and I just used pliers to pull off 
+the supports. Here are a few images of my putting it together, and you can find more at my blog post:
