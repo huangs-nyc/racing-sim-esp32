@@ -54,7 +54,7 @@ go to the updateCar() function and change the first parameter for carAngle and m
 
 From there, it should work! Check out the Demo URL above to check for functionality in higher quality, or the gif below.
 
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/racing-sim-demo.gif" height="400" width="700"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/racing-sim-demo.gif" height="300" width="500"></a>
 
 # Enclosure Design
 
