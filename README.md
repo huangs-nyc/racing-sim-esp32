@@ -52,7 +52,9 @@ Something to note about this setup is that I switched the axes in terms of input
 y-axis to move forward and backward and x-axis to turn. However, since my enclosure forced my wires sideways, I switched them. To adjust which access you want to use,
 go to the updateCar() function and change the first parameter for carAngle and moveDirection to fit your needs.
 
-From there, it should work! Check out the Demo URL above to check for functionality.
+From there, it should work! Check out the Demo URL above to check for functionality, or the gif below.
+
+![demo_gif](https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/racing-sim-demo.gif)
 
 # Enclosure Design
 
