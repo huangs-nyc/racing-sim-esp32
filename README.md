@@ -72,10 +72,10 @@ If you choose to go with my design, there are a few things to keep in mind. Firs
 you might have to pry off tree supports in cases where the hollow parts are facing downwards. This was the case in my design process, and I just used pliers to pull off 
 the supports. Here are a few images of my process putting it together, and you can find more at my blog post that under the "About" tab.
 
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-1.jpg" height="345" width="245"></a>
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-2.jpg" height="345" width="245"></a>
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-3.jpg" height="345" width="245"></a>
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-4.jpg" height="345" width="245"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-1.jpg" height="335" width="235"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-2.jpg" height="335" width="235"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-3.jpg" height="335" width="235"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-4.jpg" height="335" width="235"></a>
 
 In my process of putting it together, I realized that the potentiometer was too hard to turn. Therefore, I opted to hot glue a mini flathead screwdriver
 to the potentiometer, with the head in the straight part of the arrow. Here is what the final design looks like: [insert image here]
