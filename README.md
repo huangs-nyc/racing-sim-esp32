@@ -65,4 +65,8 @@ You can also find the individual parts that make up this assembly in the 3D-prin
 If you choose to go with my design, there are a few things to keep in mind. First, you can use the M3x100 screws in the six holes to assemble them together. You might also have to use
 things like dowels and hot glue to help prop up some controls on the inside because the components are of different sizes. Depending on how you print the pieces,
 you might have to pry off tree supports in cases where the hollow parts are facing downwards. This was the case in my design process, and I just used pliers to pull off 
-the supports. Here are a few images of my putting it together, and you can find more at my blog post:
+the supports. Here are a few images of my putting it together, and you can find more at my blog post that under the "About" tab.
+
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-1.jpg" height="400" width="300"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-2.jpg" height="400" width="300"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-3.jpg" height="400" width="300"></a>
