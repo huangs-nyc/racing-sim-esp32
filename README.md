@@ -7,6 +7,10 @@ setup and testing, and Processing (file in Java) for running the game.
 This game spawns a car on a track, and you must try to keep on the right lane of the track, and
 get to the end as fast as possible. There is a speed tracker and a race time tracker on screen as well.
 
+The design goal for this project to make as much use of the three components as possible. The joystick thus, controls
+the direction and some acceleration, the potentiometer controls the base speed of the car, and the button controls when the 
+race is restarted.
+
 Demo URL: https://youtu.be/L3pJh7pFlN4
 
 Blog Post URL: https://steven-ces-blog.notion.site/Race-Car-Simulator-11b4dc2df41c808ba29cd394c15fe13f?pvs=4
@@ -60,13 +64,18 @@ From there, it should work! Check out the Demo URL above to check for functional
 
 Now that your software and breadboard is up and running, we can turn towards the enclosure deisgn to house the three main components. For my enclosure design,
 I decided to go with a layered 3D-print system, which you can find at this link: https://cad.onshape.com/documents/063c7e8d5bc175fe4d6adb77/w/1ce7811f8bf842ba5b9ee530/e/09f7d4457a9dedc46022296b.
-You can also find the individual parts that make up this assembly in the 3D-prints folder.
+You can also find the individual parts that make up this assembly in the 3D-prints folder. I printed my parts using the Ultimaker S2+ 3D printer.
 
-If you choose to go with my design, there are a few things to keep in mind. First, you can use the M3x100 screws in the six holes to assemble them together. You might also have to use
-things like dowels and hot glue to help prop up some controls on the inside because the components are of different sizes. Depending on how you print the pieces,
+The goal of my design here was to create a familiar enclosure 
+
+If you choose to go with my design, there are a few things to keep in mind. First, you can use the M3x100 screws in the six holes to assemble them together. You might also have to use things like dowels and hot glue to help prop up some controls on the inside because the components are of different sizes. Depending on how you print the pieces,
 you might have to pry off tree supports in cases where the hollow parts are facing downwards. This was the case in my design process, and I just used pliers to pull off 
-the supports. Here are a few images of my putting it together, and you can find more at my blog post that under the "About" tab.
+the supports. Here are a few images of my process putting it together, and you can find more at my blog post that under the "About" tab.
 
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-1.jpg" height="400" width="300"></a>
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-2.jpg" height="400" width="300"></a>
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-3.jpg" height="400" width="300"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-1.jpg" height="345" width="245"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-2.jpg" height="345" width="245"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-3.jpg" height="345" width="245"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-4.jpg" height="345" width="245"></a>
+
+In my process of putting it together, I realized that the potentiometer was too hard to turn. Therefore, I opted to hot glue a mini flathead screwdriver
+to the potentiometer, with the head in the straight part of the arrow. Here is what the final design looks like: [insert image here]
