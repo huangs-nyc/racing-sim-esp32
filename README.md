@@ -70,7 +70,7 @@ From there, it should work! Check out the Demo URL above to check for functional
 # Enclosure Design
 
 Now that your software and breadboard is up and running, we can turn towards the enclosure deisgn to house the three main components. For my enclosure design,
-I decided to go with a layered 3D-print system, which you can find at this link: https://cad.onshape.com/documents/063c7e8d5bc175fe4d6adb77/w/1ce7811f8bf842ba5b9ee530/e/09f7d4457a9dedc46022296b.
+I decided to go with a layered 3D-print system, which you can find at this link: https://cad.onshape.com/documents/063c7e8d5bc175fe4d6adb77/w/1ce7811f8bf842ba5b9ee530/e/09f7d4457a9dedc46022296b?renderMode=0&uiState=672294fc3c594b133b3c9f1b
 You can also find the individual parts that make up this assembly in the 3D-prints folder. I printed my parts using the Ultimaker S2+ 3D printer.
 
 The goal of my design here was to create a familiar enclosure 
