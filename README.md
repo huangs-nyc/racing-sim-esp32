@@ -11,7 +11,8 @@ The design goal for this project to make as much use of the three components as 
 the direction and some acceleration, the potentiometer controls the base speed of the car, and the button controls when the 
 race is restarted.
 
-Demo URL: https://youtu.be/L3pJh7pFlN4
+Demo 1 URL: https://youtu.be/L3pJh7pFlN4
+Demo 2 URL: https://youtu.be/qm8bRtaCw-c
 
 Blog Post URL: https://steven-ces-blog.notion.site/Race-Car-Simulator-11b4dc2df41c808ba29cd394c15fe13f?pvs=4
 
@@ -45,14 +46,14 @@ Make sure that you have the Arduino IDE software and your ESP32 software install
 have Arduino IDE or the ESP32 LILYGO TTGO software, follow these instructions to install them: https://coms3930.notion.site/Lab-1-TFT-Display-a53b9c10137a4d95b22d301ec6009a94.
 
 Once you have this installed, connect your board to the Arduino IDE, and upload and run the code from the data-input-testing.ino file. Open your
-serial monitor, and if your breadboard connections are correct, you will see four values, separated by commas. The first is the x-acis input, which
+serial monitor, and if your breadboard connections are correct, you will see four values, separated by commas. The first is the x-axis input, which
 defaults to the axis perpendicular to the extruding wires. The y-axis is parallel to it, and it is the second value. The third is the value
 of the potentiometer, and the fourth is the button state. Adjust your components and check if the values are changing in the monitor
 accordingly.
 
 Running the game:
 
-Make sure that you have Processing installed. Open Processing and upload the code in race_car_sim.pde, then hit play. A screen should come up on 
+Make sure that you have Processing installed. Open Processing and upload the code in race_car_sim.pde AND the car.png image, then hit play. Both can be found in the processing-files folder. A screen should come up on 
 the starting screen prompting you to hit the button and start the game. From there, you can use the button to restart anytime in the game, including 
 when prompted when you veer too far off of the right lane of the track, as well as when you finish the game.You can use the potentiometer to
 adjust the base speed of the car, and the joystick for turning, as well as extra acceleration in the direction the car is moving.
