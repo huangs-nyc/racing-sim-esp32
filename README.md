@@ -28,9 +28,12 @@ Materials needed:
   <li>USB-C data transfer cable</li>
 </ul>
 
-The code in this repo works with a specific breadboard setup. Here is the breadboard setup that you should follow: [insert image here]
+The code in this repo works with a specific breadboard setup. I created fritzing diagrams for both a version where
+everything is wired (ideal for enclosure), and a version where the button and potentiometer are not wired for testing. Here are the breadboard setups that you should follow:
 
-<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/breadboard-setup.jpg" height="400" width="300"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/breadboard-setup.jpg" height="250" width="150"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/fritz-unwired.png" height="250" width="400"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/fritz-wired.png" height="250" width="400"></a>
 
 # Software Setup
 
@@ -78,4 +81,7 @@ the supports. Here are a few images of my process putting it together, and you c
 <a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/3d-print-4.jpg" height="335" width="235"></a>
 
 In my process of putting it together, I realized that the potentiometer was too hard to turn. Therefore, I opted to hot glue a mini flathead screwdriver
-to the potentiometer, with the head in the straight part of the arrow. Here is what the final design looks like: [insert image here]
+to the potentiometer, with the head in the straight part of the arrow. Here is what the final design looks like:
+
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/final-enclosure-1.jpg" height="335" width="235"></a>
+<a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/final-enclosure-2.jpg" height="335" width="480"></a>
