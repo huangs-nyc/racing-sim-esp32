@@ -29,7 +29,9 @@ Materials needed:
 </ul>
 
 The code in this repo works with a specific breadboard setup. I created fritzing diagrams for both a version where
-everything is wired (ideal for enclosure), and a version where the button and potentiometer are not wired for testing. Here are the breadboard setups that you should follow:
+everything is wired (ideal for enclosure), and a version where the button and potentiometer are not wired for testing. 
+If you have the Fritizing software, you can got to my fritzing-files foler and find the source files there. 
+Here are the breadboard setups that you should follow, in image form:
 
 <a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/breadboard-setup.jpg" height="250" width="150"></a>
 <a href="url"><img src="https://github.com/huangs-nyc/racing-sim-esp32/blob/main/media-folder/fritz-unwired.png" height="250" width="400"></a>
