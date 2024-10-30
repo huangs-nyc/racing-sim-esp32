@@ -12,6 +12,7 @@ the direction and some acceleration, the potentiometer controls the base speed o
 race is restarted.
 
 Demo 1 URL: https://youtu.be/L3pJh7pFlN4
+
 Demo 2 URL: https://youtu.be/qm8bRtaCw-c
 
 Blog Post URL: https://steven-ces-blog.notion.site/Race-Car-Simulator-11b4dc2df41c808ba29cd394c15fe13f?pvs=4
